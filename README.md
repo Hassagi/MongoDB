@@ -111,10 +111,3 @@ db.data.aggregate([
   { $group: { _id: "$hemisphere", count: { $sum: 1 } } }
 ])
 ```
-
-Wyniki:
-
-```
-[ { _id: 'Southern', count: 3288 }, { _id: 'Northern', count: 49420 } ]
-[ { _id: 'Western', count: 13647 }, { _id: 'Eastern', count: 39061 } ]
-```
