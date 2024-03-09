@@ -20,7 +20,7 @@ db.data.distinct('city').length
 db.data.distinct('location').length
 ```
 
-### 4. Usuń rekordy z ujemnymi wartościami zanieczyszczenia
+### 4. Usuwanie rekordów z ujemnymi wartościami zanieczyszczenia
 
 ```javascript
 var errors = { 'measurements_value': { $lt: 0 } };
