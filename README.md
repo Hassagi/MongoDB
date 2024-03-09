@@ -27,7 +27,7 @@ var errors = { 'measurements_value': { $lt: 0 } };
 db.data.deleteMany(errors);
 ```
 
-### 5. Unikalne typy zanieczyszczeń i analiza ilości i średniej wartości
+### 5. Unikalne typy zanieczyszczeń, analiza ilości i średniej wartości
 
 ```javascript
 db.data.distinct('measurements_parameter')
@@ -53,7 +53,35 @@ db.data.aggregate([
 ### 7. Zliczanie i średnia wartość dla próbek z podziałem na typy zanieczyszczeń (MapReduce)
 
 ```javascript
-// MapReduce
+map = function() {
+  emit(
+    { measurements_parameter: this.measurements_parameter },
+    { measurements_value: this.measurements_value, count: 1 }
+  );
+}
+reduce = function(key, values) {
+  var total = 0;
+  var count = 0;
+  for (var i = 0; i < values.length; i++) {
+    total += values[i].measurements_value;
+    count += values[i].count;
+  }
+  return { measurements_value: total, count: count };
+}
+finalize = function(key, reducedValue) {
+  reducedValue.avg = parseInt(reducedValue.measurements_value / reducedValue.count);
+  delete reducedValue.count;
+  return reducedValue;
+}
+db.runCommand({
+  mapReduce: 'data',
+  map: map,
+  reduce: reduce,
+  out: 'data.report',
+  finalize: finalize
+})
+
+db.data.report.find()
 ```
 
 ### 8. Zliczanie i średnia wartość dla próbek z podziałem na typy zanieczyszczeń (Agregacja)
