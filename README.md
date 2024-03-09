@@ -3,7 +3,7 @@
 ### 1. Import danych
 
 ```bash
-mongoimport --jsonArray -d aq -c data --type json --file /home/hasanga/Downloads/openaq.json
+mongoimport --jsonArray -d aq -c data --type json --file path_to_json_file
 ```
 
 ### 2. Unikalne kraje
